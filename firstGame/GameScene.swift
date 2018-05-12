@@ -7,83 +7,138 @@
 //
 
 import SpriteKit
-import GameplayKit
 
-class GameScene: SKScene {
+class GameScene: SKScene,SKPhysicsContactDelegate {
     
-    private var label : SKLabelNode?
-    private var spinnyNode : SKShapeNode?
+    private let cam = SKCameraNode()
+    private let player = Player()
+    private let ground = Ground()
+    private var screenCenterY = CGFloat()
+    let initialPlayerPosition = CGPoint(x:150, y: 250)
+    var playerProgress = CGFloat()
+    let encounterManager = EncounterManager()
+    let powerUpStar = Star()
+    var nextEncounterSpawnPosition = CGFloat(150)
+    
+    var coinsCollected = 0
     
     override func didMove(to view: SKView) {
+    
+        self.physicsWorld.contactDelegate = self
         
-        // Get label node from scene and store it for use later
-        self.label = self.childNode(withName: "//helloLabel") as? SKLabelNode
-        if let label = self.label {
-            label.alpha = 0.0
-            label.run(SKAction.fadeIn(withDuration: 2.0))
-        }
+        self.anchorPoint = .zero
+        self.backgroundColor = UIColor(red: 0.4,green: 0.6, blue: 0.95, alpha: 1.0)
         
-        // Create shape node to use during mouse interaction
-        let w = (self.size.width + self.size.height) * 0.05
-        self.spinnyNode = SKShapeNode.init(rectOf: CGSize.init(width: w, height: w), cornerRadius: w * 0.3)
+        self.camera = cam
+ 
+        player.position = initialPlayerPosition
         
-        if let spinnyNode = self.spinnyNode {
-            spinnyNode.lineWidth = 2.5
-            
-            spinnyNode.run(SKAction.repeatForever(SKAction.rotate(byAngle: CGFloat(Double.pi), duration: 1)))
-            spinnyNode.run(SKAction.sequence([SKAction.wait(forDuration: 0.5),
-                                              SKAction.fadeOut(withDuration: 0.5),
-                                              SKAction.removeFromParent()]))
-        }
+        self.addChild(player)
+        
+        self.physicsWorld.gravity = CGVector(dx:0,dy: -5)
+        
+        screenCenterY = self.size.height / 2
+        
+        encounterManager.addEncountersToScene(gameScene: self)
+        
+        encounterManager.encounters[0].position = CGPoint(x:400, y:300)
+        
+        self.addChild(powerUpStar)
+        
+        powerUpStar.position = CGPoint(x: -2000,y:-2000)
+        
+        ground.position = CGPoint(x: -self.size.width * 2,y: 150)
+        ground.size = CGSize(width: self.size.width*6,height: 0)
+        
+        ground.createChildren()
+        
+        self.addChild(ground)
     }
     
-    
-    func touchDown(atPoint pos : CGPoint) {
-        if let n = self.spinnyNode?.copy() as! SKShapeNode? {
-            n.position = pos
-            n.strokeColor = SKColor.green
-            self.addChild(n)
+    override func didSimulatePhysics() {
+        var cameraYPos = screenCenterY
+        cam.yScale = 1
+        cam.xScale = 1
+        
+        playerProgress = player.position.x - initialPlayerPosition.x
+        if(player.position.y>screenCenterY){
+            cameraYPos = player.position.y
+            let percentOfMaxHeight = (player.position.y - screenCenterY) / (player.maxHeight - screenCenterY)
+            let newScale = 1 + percentOfMaxHeight
+            cam.yScale = newScale
+            cam.xScale = newScale
         }
-    }
-    
-    func touchMoved(toPoint pos : CGPoint) {
-        if let n = self.spinnyNode?.copy() as! SKShapeNode? {
-            n.position = pos
-            n.strokeColor = SKColor.blue
-            self.addChild(n)
+        self.camera!.position = CGPoint(x: player.position.x, y: cameraYPos)
+        ground.checkForReposition(playerProgress:playerProgress)
+        
+        if player.position.x > nextEncounterSpawnPosition{
+            encounterManager.placeNextEncounter(currentXPos: nextEncounterSpawnPosition)
+            nextEncounterSpawnPosition += 1200
         }
-    }
-    
-    func touchUp(atPoint pos : CGPoint) {
-        if let n = self.spinnyNode?.copy() as! SKShapeNode? {
-            n.position = pos
-            n.strokeColor = SKColor.red
-            self.addChild(n)
+        let starRoll = Int(arc4random_uniform(10))
+        if starRoll == 0{
+            if abs(player.position.x - powerUpStar.position.x) > 1200{
+                let randomYPos = 50 + CGFloat(arc4random_uniform(400))
+                powerUpStar.position = CGPoint(x:nextEncounterSpawnPosition,y:randomYPos)
+                powerUpStar.physicsBody?.angularVelocity = 0
+                powerUpStar.physicsBody?.velocity = CGVector(dx:0,dy:0)
+            }
         }
+        
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        if let label = self.label {
-            label.run(SKAction.init(named: "Pulse")!, withKey: "fadeInOut")
+        for touch in touches{
+            let location = touch.location(in:self)
+            let nodeTouched = atPoint(location)
+            if let gameSprite = nodeTouched as? GameSprite{
+                gameSprite.onTap()
+                player.startFlapping()
+            }
         }
-        
-        for t in touches { self.touchDown(atPoint: t.location(in: self)) }
-    }
-    
-    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for t in touches { self.touchMoved(toPoint: t.location(in: self)) }
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for t in touches { self.touchUp(atPoint: t.location(in: self)) }
+        player.stopFlapping()
     }
-    
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for t in touches { self.touchUp(atPoint: t.location(in: self)) }
+        player.stopFlapping()
+    }
+    override func update(_ currentTime:TimeInterval){
+        player.update()
+    
     }
     
-    
-    override func update(_ currentTime: TimeInterval) {
-        // Called before each frame is rendered
+    func didBegin(_ contact: SKPhysicsContact) {
+        
+        let otherBody:SKPhysicsBody
+        let penguinMask = PhysicsCategory.penguin.rawValue | PhysicsCategory.damagedPenguin.rawValue
+        
+        if((contact.bodyA.categoryBitMask & penguinMask)>0){
+            otherBody = contact.bodyB
+        }
+        else{
+            otherBody = contact.bodyA
+        }
+        
+        switch otherBody.categoryBitMask{
+            case PhysicsCategory.ground.rawValue:
+                print("hit the ground")
+                player.takeDamage()
+            case PhysicsCategory.enemy.rawValue:
+                print("take damage")
+                player.takeDamage()
+            case PhysicsCategory.coin.rawValue:
+                if let coin = otherBody.node as? Coin{
+                    coin.collect()
+                    self.coinsCollected += coin.value
+                    print(self.coinsCollected)
+            }
+            case PhysicsCategory.powerup.rawValue:
+                powerUpStar.getStar()
+                player.starPower()
+            default:
+                print("contact with no game logic")
+        }
     }
 }

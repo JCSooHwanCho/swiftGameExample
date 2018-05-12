@@ -11,7 +11,7 @@ import SpriteKit
 import GameplayKit
 
 class GameViewController: UIViewController {
-
+/* for make landscape game. viewdidLoad calls before devices orientation
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -31,17 +31,27 @@ class GameViewController: UIViewController {
             view.showsNodeCount = true
         }
     }
-
+*/
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        
+        if let view = self.view as! SKView?{
+            if let scene = SKScene(fileNamed: "GameScene"){
+                scene.scaleMode = .aspectFill
+                scene.size = view.bounds.size
+                view.presentScene(scene)
+            }
+            view.ignoresSiblingOrder = true
+            view.showsFPS = true
+            view.showsNodeCount = true
+        }
+    }
     override var shouldAutorotate: Bool {
         return true
     }
 
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        if UIDevice.current.userInterfaceIdiom == .phone {
-            return .allButUpsideDown
-        } else {
-            return .all
-        }
+       return .landscape
     }
 
     override func didReceiveMemoryWarning() {
