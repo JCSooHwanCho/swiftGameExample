@@ -18,8 +18,9 @@ class GameScene: SKScene,SKPhysicsContactDelegate {
     var playerProgress = CGFloat()
     let encounterManager = EncounterManager()
     let powerUpStar = Star()
+    let hud = HUD()
     var nextEncounterSpawnPosition = CGFloat(150)
-    
+    var backgrounds:[Background] = []
     var coinsCollected = 0
     
     override func didMove(to view: SKView) {
@@ -53,6 +54,29 @@ class GameScene: SKScene,SKPhysicsContactDelegate {
         ground.createChildren()
         
         self.addChild(ground)
+        
+        self.addChild(self.camera!)
+        
+        self.camera!.zPosition = 50
+        
+        hud.createHudNodes(screenSize: self.size)
+        
+        self.camera!.addChild(hud)
+        
+        for _ in 0..<3{
+            backgrounds.append(Background())
+        }
+        
+        backgrounds[0].Spawn(parentNode: self, imageName: "background-front", zPosition: -5, movementMultiplier: 0.75)
+        backgrounds[1].Spawn(parentNode: self, imageName: "background-middle", zPosition: -10, movementMultiplier: 0.5)
+        backgrounds[2].Spawn(parentNode: self, imageName: "background-back", zPosition: -15, movementMultiplier: 0.2)
+        
+        if let dotEmitter = SKEmitterNode(fileNamed: "PierrePath"){
+            player.zPosition = 10
+            dotEmitter.particleZPosition = -1
+            player.addChild(dotEmitter)
+            dotEmitter.targetNode = self
+        }
     }
     
     override func didSimulatePhysics() {
@@ -84,7 +108,9 @@ class GameScene: SKScene,SKPhysicsContactDelegate {
                 powerUpStar.physicsBody?.velocity = CGVector(dx:0,dy:0)
             }
         }
-        
+        for background in self.backgrounds{
+            background.updatePosition(playerProgress: playerProgress)
+        }
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -123,16 +149,16 @@ class GameScene: SKScene,SKPhysicsContactDelegate {
         
         switch otherBody.categoryBitMask{
             case PhysicsCategory.ground.rawValue:
-                print("hit the ground")
                 player.takeDamage()
+                hud.setHealthDisplay(newHealth: player.health)
             case PhysicsCategory.enemy.rawValue:
-                print("take damage")
                 player.takeDamage()
+                hud.setHealthDisplay(newHealth: player.health)
             case PhysicsCategory.coin.rawValue:
                 if let coin = otherBody.node as? Coin{
                     coin.collect()
                     self.coinsCollected += coin.value
-                    print(self.coinsCollected)
+                    hud.setCoinCountDisplay(newCoinCount: self.coinsCollected)
             }
             case PhysicsCategory.powerup.rawValue:
                 powerUpStar.getStar()
