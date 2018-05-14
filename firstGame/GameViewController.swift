@@ -9,6 +9,7 @@
 import UIKit
 import SpriteKit
 import GameplayKit
+import AVFoundation
 
 class GameViewController: UIViewController {
 /* for make landscape game. viewdidLoad calls before devices orientation
@@ -32,18 +33,25 @@ class GameViewController: UIViewController {
         }
     }
 */
+    var musicPlayer = AVAudioPlayer()
+    
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
+        let menuScene = MenuScene()
+        let skView = self.view as! SKView
+        skView.ignoresSiblingOrder = true
+        menuScene.size = view.bounds.size
+        skView.presentScene(menuScene)
         
-        if let view = self.view as! SKView?{
-            if let scene = SKScene(fileNamed: "GameScene"){
-                scene.scaleMode = .aspectFill
-                scene.size = view.bounds.size
-                view.presentScene(scene)
+        if let musicPath = Bundle.main.path(forResource: "Sound/BackgroundMusic.m4a", ofType: nil){
+            let url = URL(fileURLWithPath: musicPath)
+            do{
+                musicPlayer = try AVAudioPlayer(contentsOf: url)
+                musicPlayer.numberOfLoops = -1
+                musicPlayer.prepareToPlay()
+                musicPlayer.play()
             }
-            view.ignoresSiblingOrder = true
-            view.showsFPS = true
-            view.showsNodeCount = true
+            catch{/*load error*/}
         }
     }
     override var shouldAutorotate: Bool {

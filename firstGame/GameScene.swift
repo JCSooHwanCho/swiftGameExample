@@ -24,7 +24,6 @@ class GameScene: SKScene,SKPhysicsContactDelegate {
     var coinsCollected = 0
     
     override func didMove(to view: SKView) {
-    
         self.physicsWorld.contactDelegate = self
         
         self.anchorPoint = .zero
@@ -77,6 +76,7 @@ class GameScene: SKScene,SKPhysicsContactDelegate {
             player.addChild(dotEmitter)
             dotEmitter.targetNode = self
         }
+        self.run(SKAction.playSoundFileNamed("Sound/StartGame.aif", waitForCompletion: false))
     }
     
     override func didSimulatePhysics() {
@@ -119,9 +119,16 @@ class GameScene: SKScene,SKPhysicsContactDelegate {
             let nodeTouched = atPoint(location)
             if let gameSprite = nodeTouched as? GameSprite{
                 gameSprite.onTap()
-                player.startFlapping()
+            }
+            
+            if nodeTouched.name == "restartGame"{
+                self.view?.presentScene(GameScene(size: self.size),transition: .crossFade(withDuration: 0.6))
+            }
+            else if nodeTouched.name == "returnToMenu"{
+                self.view?.presentScene(MenuScene(size:self.size), transition: .crossFade(withDuration: 0.6))
             }
         }
+        player.startFlapping()
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -166,5 +173,8 @@ class GameScene: SKScene,SKPhysicsContactDelegate {
             default:
                 print("contact with no game logic")
         }
+    }
+    func gameOver(){
+        hud.showButtons()
     }
 }

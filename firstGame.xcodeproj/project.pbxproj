@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		423A4CE920A8558A00057D1F /* Background.swift in Sources */ = {isa = PBXBuildFile; fileRef = 423A4CE820A8558A00057D1F /* Background.swift */; };
 		423A4CEB20A862D400057D1F /* PierrePath.sks in Resources */ = {isa = PBXBuildFile; fileRef = 423A4CEA20A862D400057D1F /* PierrePath.sks */; };
+		4242E29A20A9B561001AD93A /* Menuscene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4242E29920A9B561001AD93A /* Menuscene.swift */; };
+		4242E2B220A9C9E1001AD93A /* Sound in Resources */ = {isa = PBXBuildFile; fileRef = 4242E2B120A9C9E1001AD93A /* Sound */; };
 		429FB911209D7E14000FEF9E /* GameSprite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 429FB910209D7E14000FEF9E /* GameSprite.swift */; };
 		429FB913209D7E7F000FEF9E /* Bee.swift in Sources */ = {isa = PBXBuildFile; fileRef = 429FB912209D7E7F000FEF9E /* Bee.swift */; };
 		429FB915209D8225000FEF9E /* Ground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 429FB914209D8225000FEF9E /* Ground.swift */; };
@@ -36,6 +38,8 @@
 /* Begin PBXFileReference section */
 		423A4CE820A8558A00057D1F /* Background.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Background.swift; sourceTree = "<group>"; };
 		423A4CEA20A862D400057D1F /* PierrePath.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = PierrePath.sks; sourceTree = "<group>"; };
+		4242E29920A9B561001AD93A /* Menuscene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Menuscene.swift; sourceTree = "<group>"; };
+		4242E2B120A9C9E1001AD93A /* Sound */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Sound; path = ../../../../Downloads/assets/Sound; sourceTree = "<group>"; };
 		429FB910209D7E14000FEF9E /* GameSprite.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameSprite.swift; sourceTree = "<group>"; };
 		429FB912209D7E7F000FEF9E /* Bee.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bee.swift; sourceTree = "<group>"; };
 		429FB914209D8225000FEF9E /* Ground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ground.swift; sourceTree = "<group>"; };
@@ -102,6 +106,7 @@
 		42BF7408209B1C680036BB98 /* firstGame */ = {
 			isa = PBXGroup;
 			children = (
+				4242E2B120A9C9E1001AD93A /* Sound */,
 				42BF741B209B1C6C0036BB98 /* Info.plist */,
 				42BF740D209B1C680036BB98 /* Actions.sks */,
 				42BF740B209B1C680036BB98 /* GameScene.sks */,
@@ -125,6 +130,7 @@
 				42BF7413209B1C680036BB98 /* Main.storyboard */,
 				423A4CE820A8558A00057D1F /* Background.swift */,
 				423A4CEA20A862D400057D1F /* PierrePath.sks */,
+				4242E29920A9B561001AD93A /* Menuscene.swift */,
 			);
 			path = firstGame;
 			sourceTree = "<group>";
@@ -189,6 +195,7 @@
 			files = (
 				42A4BF7920A02A8100B5D321 /* EncounterB.sks in Resources */,
 				42BF7415209B1C680036BB98 /* Main.storyboard in Resources */,
+				4242E2B220A9C9E1001AD93A /* Sound in Resources */,
 				42BF740C209B1C680036BB98 /* GameScene.sks in Resources */,
 				42A4BF7B20A02A9100B5D321 /* EncounterC.sks in Resources */,
 				42BF7417209B1C6B0036BB98 /* Assets.xcassets in Resources */,
@@ -219,6 +226,7 @@
 				42A4BF6A20A0015400B5D321 /* Star.swift in Sources */,
 				42C743FB20A7310400897E6B /* HUD.swift in Sources */,
 				42A4BF7720A024A000B5D321 /* EncounterManager.swift in Sources */,
+				4242E29A20A9B561001AD93A /* Menuscene.swift in Sources */,
 				42A4BF6C20A007A600B5D321 /* Madfly.swift in Sources */,
 				423A4CE920A8558A00057D1F /* Background.swift in Sources */,
 			);

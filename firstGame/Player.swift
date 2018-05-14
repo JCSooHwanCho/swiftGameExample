@@ -26,6 +26,8 @@ class Player:SKSpriteNode,GameSprite{
     var dieAnimation = SKAction()
     var forwardVelocity:CGFloat = 200
     
+    let powerSound = SKAction.playSoundFileNamed("Sound/Powerup.aif", waitForCompletion: false)
+    let hurtSound = SKAction.playSoundFileNamed("Sound/Hurt.aif", waitForCompletion: false)
     func onTap() {
         
         
@@ -171,6 +173,10 @@ class Player:SKSpriteNode,GameSprite{
         self.run(self.dieAnimation)
         self.flapping = false
         self.forwardVelocity = 0
+        
+        if let gameScene = self.parent as? GameScene{
+            gameScene.gameOver()
+        }
     }
     
     func takeDamage(){
@@ -185,6 +191,7 @@ class Player:SKSpriteNode,GameSprite{
         else{
             self.run(self.damagedAnimation)
         }
+        self.run(hurtSound)
     }
     
     func starPower(){
@@ -204,5 +211,6 @@ class Player:SKSpriteNode,GameSprite{
             }])
         
         self.run(starSequence,withKey: "starPower")
+        self.run(powerSound)
     }
 }
