@@ -25,7 +25,7 @@ class Player:SKSpriteNode,GameSprite{
     var damagedAnimation = SKAction()
     var dieAnimation = SKAction()
     var forwardVelocity:CGFloat = 200
-    
+    let maxHealth = 3
     let powerSound = SKAction.playSoundFileNamed("Sound/Powerup.aif", waitForCompletion: false)
     let hurtSound = SKAction.playSoundFileNamed("Sound/Hurt.aif", waitForCompletion: false)
     func onTap() {
@@ -53,7 +53,8 @@ class Player:SKSpriteNode,GameSprite{
         
         self.physicsBody?.contactTestBitMask = PhysicsCategory.enemy.rawValue |
         PhysicsCategory.ground.rawValue | PhysicsCategory.powerup.rawValue |
-        PhysicsCategory.coin.rawValue
+        PhysicsCategory.coin.rawValue | PhysicsCategory.crate.rawValue
+        
         self.physicsBody?.collisionBitMask = PhysicsCategory.ground.rawValue
         
         self.physicsBody?.affectedByGravity = false

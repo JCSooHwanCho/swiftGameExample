@@ -66,6 +66,9 @@ class EncounterManager{
                 spriteNode.physicsBody?.angularVelocity = 0
                 
                 spriteNode.zRotation = 0
+                if let crateTest = spriteNode as? Crate{
+                    crateTest.reset()
+                }
                 if let initialPositionVal = spriteNode.userData?.value(forKey: "initialPosition") as? NSValue{
                     spriteNode.position = initialPositionVal.cgPointValue
                 }
@@ -115,4 +118,5 @@ enum PhysicsCategory:UInt32{
     case enemy = 8
     case coin = 16
     case powerup = 32
+    case crate = 64
 }

@@ -10,19 +10,20 @@ import SpriteKit
 
 class GameScene: SKScene,SKPhysicsContactDelegate {
     
-    private let cam = SKCameraNode()
-    private let player = Player()
-    private let ground = Ground()
-    private var screenCenterY = CGFloat()
+    let cam = SKCameraNode()
+    let player = Player()
+    let ground = Ground()
     let initialPlayerPosition = CGPoint(x:150, y: 250)
-    var playerProgress = CGFloat()
     let encounterManager = EncounterManager()
     let powerUpStar = Star()
     let hud = HUD()
+    let particlePool = ParticlePool()
+    let heartCrate = Crate()
     var nextEncounterSpawnPosition = CGFloat(150)
     var backgrounds:[Background] = []
     var coinsCollected = 0
-    
+    var playerProgress = CGFloat()
+    var screenCenterY = CGFloat()
     override func didMove(to view: SKView) {
         self.physicsWorld.contactDelegate = self
         
@@ -77,6 +78,12 @@ class GameScene: SKScene,SKPhysicsContactDelegate {
             dotEmitter.targetNode = self
         }
         self.run(SKAction.playSoundFileNamed("Sound/StartGame.aif", waitForCompletion: false))
+        
+        particlePool.addEmittersToScene(scene:self)
+        
+        self.addChild(heartCrate)
+        heartCrate.position = CGPoint(x:-2100, y: -2100)
+        heartCrate.turnToHeartCrate()
     }
     
     override func didSimulatePhysics() {
@@ -107,6 +114,10 @@ class GameScene: SKScene,SKPhysicsContactDelegate {
                 powerUpStar.physicsBody?.angularVelocity = 0
                 powerUpStar.physicsBody?.velocity = CGVector(dx:0,dy:0)
             }
+        }
+        if starRoll == 1{
+            heartCrate.reset()
+            heartCrate.position = CGPoint(x: nextEncounterSpawnPosition - 600, y:270)
         }
         for background in self.backgrounds{
             background.updatePosition(playerProgress: playerProgress)
@@ -170,6 +181,10 @@ class GameScene: SKScene,SKPhysicsContactDelegate {
             case PhysicsCategory.powerup.rawValue:
                 powerUpStar.getStar()
                 player.starPower()
+            case PhysicsCategory.crate.rawValue:
+                if let crate = otherBody.node as? Crate{
+                    crate.explode(gameScene: self)
+            }
             default:
                 print("contact with no game logic")
         }

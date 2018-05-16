@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4227138120AC5A14005C27EE /* Crate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4227138020AC5A14005C27EE /* Crate.swift */; };
+		4227138320AC5CE5005C27EE /* HeartExplosion.sks in Resources */ = {isa = PBXBuildFile; fileRef = 4227138220AC5CE5005C27EE /* HeartExplosion.sks */; };
+		4227138520AC5D79005C27EE /* CrateExplosion.sks in Resources */ = {isa = PBXBuildFile; fileRef = 4227138420AC5D79005C27EE /* CrateExplosion.sks */; };
+		4227138720AC5E2E005C27EE /* ParticlePool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4227138620AC5E2E005C27EE /* ParticlePool.swift */; };
 		423A4CE920A8558A00057D1F /* Background.swift in Sources */ = {isa = PBXBuildFile; fileRef = 423A4CE820A8558A00057D1F /* Background.swift */; };
 		423A4CEB20A862D400057D1F /* PierrePath.sks in Resources */ = {isa = PBXBuildFile; fileRef = 423A4CEA20A862D400057D1F /* PierrePath.sks */; };
 		4242E29A20A9B561001AD93A /* Menuscene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4242E29920A9B561001AD93A /* Menuscene.swift */; };
@@ -36,6 +40,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		4227138020AC5A14005C27EE /* Crate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Crate.swift; sourceTree = "<group>"; };
+		4227138220AC5CE5005C27EE /* HeartExplosion.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = HeartExplosion.sks; sourceTree = "<group>"; };
+		4227138420AC5D79005C27EE /* CrateExplosion.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = CrateExplosion.sks; sourceTree = "<group>"; };
+		4227138620AC5E2E005C27EE /* ParticlePool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticlePool.swift; sourceTree = "<group>"; };
 		423A4CE820A8558A00057D1F /* Background.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Background.swift; sourceTree = "<group>"; };
 		423A4CEA20A862D400057D1F /* PierrePath.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = PierrePath.sks; sourceTree = "<group>"; };
 		4242E29920A9B561001AD93A /* Menuscene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Menuscene.swift; sourceTree = "<group>"; };
@@ -131,6 +139,10 @@
 				423A4CE820A8558A00057D1F /* Background.swift */,
 				423A4CEA20A862D400057D1F /* PierrePath.sks */,
 				4242E29920A9B561001AD93A /* Menuscene.swift */,
+				4227138020AC5A14005C27EE /* Crate.swift */,
+				4227138220AC5CE5005C27EE /* HeartExplosion.sks */,
+				4227138420AC5D79005C27EE /* CrateExplosion.sks */,
+				4227138620AC5E2E005C27EE /* ParticlePool.swift */,
 			);
 			path = firstGame;
 			sourceTree = "<group>";
@@ -194,8 +206,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				42A4BF7920A02A8100B5D321 /* EncounterB.sks in Resources */,
+				4227138520AC5D79005C27EE /* CrateExplosion.sks in Resources */,
 				42BF7415209B1C680036BB98 /* Main.storyboard in Resources */,
 				4242E2B220A9C9E1001AD93A /* Sound in Resources */,
+				4227138320AC5CE5005C27EE /* HeartExplosion.sks in Resources */,
 				42BF740C209B1C680036BB98 /* GameScene.sks in Resources */,
 				42A4BF7B20A02A9100B5D321 /* EncounterC.sks in Resources */,
 				42BF7417209B1C6B0036BB98 /* Assets.xcassets in Resources */,
@@ -227,8 +241,10 @@
 				42C743FB20A7310400897E6B /* HUD.swift in Sources */,
 				42A4BF7720A024A000B5D321 /* EncounterManager.swift in Sources */,
 				4242E29A20A9B561001AD93A /* Menuscene.swift in Sources */,
+				4227138120AC5A14005C27EE /* Crate.swift in Sources */,
 				42A4BF6C20A007A600B5D321 /* Madfly.swift in Sources */,
 				423A4CE920A8558A00057D1F /* Background.swift in Sources */,
+				4227138720AC5E2E005C27EE /* ParticlePool.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
